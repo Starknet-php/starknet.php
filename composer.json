@@ -1,5 +1,5 @@
 {
-    "name": "StarkNet-php/starknet.php",
+    "name": "starknet-php/starknet.php",
     "description": "PHP sdk that allows you to interact with StarkNet L2 network",
     "keywords": ["php", "StarkNet", "ethereum", "L2", "sdk"],
     "license": "MIT",
@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "phpseclib/phpseclib": "~3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.3.2",

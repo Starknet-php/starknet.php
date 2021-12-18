@@ -2,8 +2,8 @@
 <h3 align="center">starknet.php is a PHP sdk that allows you to interact with StarkNet from a PHP application.</h2>
 
 <p align="center">
-  [![license](https://img.shields.io/badge/license-MIT-black)](https://github.com/Starknet-php/starknet.php/blob/main/LICENSE.md)
-  [![starkware](https://img.shields.io/badge/powered_by-StarkWare-navy)](https://starkware.co)
+      <a href="https://starkware.co"><img alt="starkware" src="https://img.shields.io/badge/powered_by-StarkWare-navy"></a>
+      <a href="https://github.com/Starknet-php/starknet.php/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-black"></a>
 </p>
 
 > This project is a work-in-progress. Code and documentation are currently under development and are subject to change.

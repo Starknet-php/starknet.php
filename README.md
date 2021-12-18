@@ -1,11 +1,9 @@
 <h1 align="center">starknet.php ✨🐘</h1>
-<h2 align="center">starknet.php is a PHP sdk that allows you to interact with StarkNet from a PHP application.</h2>
+<h3 align="center">starknet.php is a PHP sdk that allows you to interact with StarkNet from a PHP application.</h2>
 
 <p align="center">
-
-[![license](https://img.shields.io/badge/license-MIT-black)](https://github.com/Starknet-php/starknet.php/blob/main/LICENSE.md)
-[![starkware](https://img.shields.io/badge/powered_by-StarkWare-navy)](https://starkware.co)
-
+  [![license](https://img.shields.io/badge/license-MIT-black)](https://github.com/Starknet-php/starknet.php/blob/main/LICENSE.md)
+  [![starkware](https://img.shields.io/badge/powered_by-StarkWare-navy)](https://starkware.co)
 </p>
 
 > This project is a work-in-progress. Code and documentation are currently under development and are subject to change.
@@ -14,9 +12,11 @@
 
 >  **Requires [PHP 8.0+](https://php.net/releases/)**
 
-Install `starknet.php ` via the [Composer](https://getcomposer.org/) package manager:
+Install `starknet.php` via the [Composer](https://getcomposer.org/) package manager:
 
-```composer require starknet-php/starknet.php ```
+```bash
+composer require starknet-php/starknet.php
+```
 
 
 ## Usage

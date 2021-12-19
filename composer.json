@@ -12,6 +12,7 @@
     "require": {
         "php": "^8.0",
         "ext-bcmath": "*",
+        "guzzlehttp/guzzle": "^7.4",
         "phpseclib/phpseclib": "~3.0"
     },
     "require-dev": {
@@ -23,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Starknet\\": "src/"
+            "starknet\\": "src/"
         }
     },
     "autoload-dev": {

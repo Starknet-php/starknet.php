@@ -2,13 +2,13 @@
 namespace starknet\Provider;
 
 use starknet\Contracts\ProviderContract;
+use phpseclib3\Math\BigInteger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use starknet\Contracts\ContractContract;
 use starknet\Contracts\TransactionContract;
 use Exception;
 use Pest\Support\Arr;
-use PHP\Math\BigNumber\BigNumber;
 
 class Provider implements ProviderContract{
 
@@ -56,7 +56,7 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array the result of the function on the smart contract.
      */
-    function callContract(array $contractTransactrion, BigNumber $blockNumber): array{
+    function callContract(array $contractTransactrion, BigInteger $blockNumber): array{
         // @todo
     }
 
@@ -67,7 +67,7 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array the block object { block_id, previous_block_id, state_root, status, timestamp, transaction_receipts, transactions }
      */
-    public function getBlock(BigNumber $blockId = null): array{
+    public function getBlock(BigInteger $blockId = null): array{
         $response = $this->request('GET', "$this->feederGatewayUrl/get_block?block_id=$blockId");
         return $response;
     }
@@ -80,7 +80,7 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array containing Bytecode and ABI of compiled contract
      */
-    public function getCode(string $contractAddress, BigNumber $blockId = null): array{
+    public function getCode(string $contractAddress, BigInteger $blockId = null): array{
         $response = $this->request('GET', "$this->feederGatewayUrl/get_code?contractAddress=$contractAddress&block_id=$blockId");
         return $response;
     }
@@ -94,7 +94,7 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array value of the storage variable
      */
-    public function getStorageAt(string $contractAddress, BigNumber $key, BigNumber $blockId = null): array{
+    public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId = null): array{
         
         $response = $this->request('GET', "$this->feederGatewayUrl/get_storage_at?contractAddress=$contractAddress&key=$key&blockId=$blockId");
         return ["$key" => $response];
@@ -145,7 +145,7 @@ class Provider implements ProviderContract{
      * @param address - (optional, defaults to a random address) the address where the contract should be deployed (alpha)
      * @return a confirmation of sending a transaction on the starknet contract
      */
-    public function deployContract(ContractContract $contract, array $constructorCalldata, BigNumber $addressSalt): array{
+    public function deployContract(ContractContract $contract, array $constructorCalldata, BigInteger $addressSalt): array{
         // @todo
     }
 
@@ -159,12 +159,12 @@ class Provider implements ProviderContract{
      * @param signature - (optional) signature to send along
      * @return response from addTransaction
      */
-    public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], BigNumber $signature = null): array{
+    public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], BigInteger $signature = null): array{
         // @todo
     }
 
 
-    public function waitForTx(BigNumber $txHash): void{
+    public function waitForTx(BigInteger $txHash): void{
         // @todo
     }
 

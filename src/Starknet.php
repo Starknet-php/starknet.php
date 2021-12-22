@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Starknet;
+namespace starknet;
 
 final class Starknet
 {
+    function __construct()
+    {
+        
+    }
 
 }

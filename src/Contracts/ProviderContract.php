@@ -1,8 +1,9 @@
 <?php
+namespace starknet\Contracts;
 
 use phpseclib3\Math\BigInteger;
-use ContractContract;
-use TransactionContract;
+use starknet\Contracts\ContractContract;
+use starknet\Contracts\TransactionContract;
 
 /*
 [Reference] -> https://github.com/starkware-libs/cairo-lang/blob/f464ec4797361b6be8989e36e02ec690e74ef285/src/starkware/starknet/services/api/gateway/gateway_client.py
@@ -64,7 +65,7 @@ interface ProviderContract {
    * @param txHash
    * @return array the transaction status array { block_id, tx_status: NOT_RECEIVED | RECEIVED | PENDING | REJECTED | ACCEPTED_ONCHAIN }
    */
-  public function getTransactionStatus(BigInteger $transactionHash): array;
+  public function getTransactionStatus(string $transactionHash): array;
 
 
   /**
@@ -73,7 +74,7 @@ interface ProviderContract {
    * @param txHash
    * @return array transacton { transaction_id, status, transaction, block_id?, block_number?, transaction_index?, transaction_failure_reason? }
    */
-  public function getTransaction(BigInteger $transactionHash): array;
+  public function getTransaction(string $transactionHash): array;
 
 
   /**

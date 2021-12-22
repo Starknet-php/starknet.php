@@ -1,12 +1,39 @@
 <?php
+namespace starknet\Provider;
 
+use starknet\Contracts\ProviderContract;
 use phpseclib3\Math\BigInteger;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use starknet\Contracts\ContractContract;
+use starknet\Contracts\TransactionContract;
+use Exception;
+use Pest\Support\Arr;
 
 class Provider implements ProviderContract{
 
+    protected string $baseUrl;
 
-    function __construct(string $baseUrl, string $gatewayUrl){
+    protected string $feederGatewayUrl;
 
+    protected string $gatewayUrl;
+
+    protected Client $client;
+
+    function __construct(string $network){
+        $baseUrl = Provider::getNetworkURL($network);
+        $this->baseUrl = $baseUrl;
+        $this->feederGatewayUrl = "$baseUrl/feeder_gateway";
+        $this->gatewayUrl = "$baseUrl/gateway";
+        $this->client = new Client();
+
+    }
+
+    static function getNetworkURL(string $network): string{
+        return match($network){
+            'mainnet' => 'https://alpha-mainnet.starknet.io',
+            'testnet' => 'https://alpha4.starknet.io'
+        };
     }
 
 
@@ -17,7 +44,8 @@ class Provider implements ProviderContract{
      */
 
     public function getContractAddresses(): string{
-        // @todo
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_contract_addresses");
+        return Arr::get($response, 'Starknet');
     }
 
 
@@ -39,8 +67,9 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array the block object { block_id, previous_block_id, state_root, status, timestamp, transaction_receipts, transactions }
      */
-    public function getBlock(BigInteger $blockId): array{
-        // @todo
+    public function getBlock(BigInteger $blockId = null): array{
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_block?block_id=$blockId");
+        return $response;
     }
 
     
@@ -51,8 +80,9 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array containing Bytecode and ABI of compiled contract
      */
-    public function getCode(string $contractAddress, BigInteger $blockId): array{
-        // @todo
+    public function getCode(string $contractAddress, BigInteger $blockId = null): array{
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_code?contractAddress=$contractAddress&block_id=$blockId");
+        return $response;
     }
 
 
@@ -64,8 +94,10 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array value of the storage variable
      */
-    public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId): array{
-        // @todo
+    public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId = null): array{
+        
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_storage_at?contractAddress=$contractAddress&key=$key&blockId=$blockId");
+        return ["$key" => $response];
     }
 
 
@@ -75,19 +107,23 @@ class Provider implements ProviderContract{
      * @param txHash
      * @return array the transaction status array { block_id, tx_status: NOT_RECEIVED | RECEIVED | PENDING | REJECTED | ACCEPTED_ONCHAIN }
      */
-    public function getTransactionStatus(BigInteger $transactionHash): array{
-        // @todo
+    public function getTransactionStatus(String $transactionHash): array{
+
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction_status?transactionHash=$transactionHash");
+        return $response;
+    
     }
 
 
     /**
-     * Gets the transaction information from a tx id.
+     * Gets the transaction information from a tx hash.
      *   
      * @param txHash
      * @return array transacton { transaction_id, status, transaction, block_id?, block_number?, transaction_index?, transaction_failure_reason? }
      */
-    public function getTransaction(BigInteger $transactionHash): array{
-        // @todo
+    public function getTransaction(String $transactionHash): array{
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction?transactionHash=$transactionHash");
+        return $response;
     }
 
 
@@ -130,6 +166,16 @@ class Provider implements ProviderContract{
 
     public function waitForTx(BigInteger $txHash): void{
         // @todo
+    }
+
+    private function request(string $method, string $uri, array $payload = []){
+        try{
+            $response = $this->client->request($method, $uri, $payload)->getBody()->getContents();
+            
+        } catch (GuzzleException $exception){
+            throw new Exception($exception->getMessage());
+        }
+        return json_decode($response, true);
     }
 
     

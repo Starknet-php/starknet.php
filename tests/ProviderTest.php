@@ -1,7 +1,7 @@
 <?php
 
 use starknet\Provider\Provider;
-use phpseclib3\Math\BigInteger;
+use PHP\Math\BigNumber\BigNumber;
 
 beforeEach(function () {
     $this->provider = new Provider('testnet');
@@ -23,7 +23,7 @@ it('can get the code deployed in a contract', function () {
 
 it('can get a storage variable in a contract located at a specific key', function () {
     $response = $this->provider->getStorageAt('0x163a1542a64402ffc93e39a4962eec51ce126f2e634631d3f1f6770a76e3a61', new BigInteger(0), new BigInteger(870));
-    expect($response)->toBeArray()->toHaveKey(new BigInteger(0));
+    expect($response)->toBeArray()->toHaveKey(new BigNumber(0));
 });
 
 it('can get the status of a transaction', function () {

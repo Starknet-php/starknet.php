@@ -1,7 +1,7 @@
 <?php
 namespace starknet\Contracts;
 
-use phpseclib3\Math\BigInteger;
+use PHP\Math\BigNumber\BigNumber;
 use starknet\Contracts\ContractContract;
 use starknet\Contracts\TransactionContract;
 
@@ -26,7 +26,7 @@ interface ProviderContract {
    * @param blockId
    * @return array the result of the function on the smart contract.
    */
-  function callContract(array $contractTransactrion, BigInteger $blockNumber): array;
+  function callContract(array $contractTransactrion, BigNumber $blockNumber): array;
 
 
   /**
@@ -35,7 +35,7 @@ interface ProviderContract {
    * @param blockId
    * @return array the block object { block_id, previous_block_id, state_root, status, timestamp, transaction_receipts, transactions }
    */
-  public function getBlock(BigInteger $blockId): array;
+  public function getBlock(BigNumber $blockId): array;
 
   
   /**
@@ -45,7 +45,7 @@ interface ProviderContract {
    * @param blockId
    * @return array containing Bytecode and ABI of compiled contract
    */
-  public function getCode(string $contractAddress, BigInteger $blockId): array;
+  public function getCode(string $contractAddress, BigNumber $blockId): array;
 
 
   /**
@@ -56,7 +56,7 @@ interface ProviderContract {
    * @param blockId
    * @return array value of the storage variable
    */
-  public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId): array;
+  public function getStorageAt(string $contractAddress, BigNumber $key, BigNumber $blockId): array;
 
 
   /**
@@ -93,7 +93,7 @@ interface ProviderContract {
    * @param address - (optional, defaults to a random address) the address where the contract should be deployed (alpha)
    * @return a confirmation of sending a transaction on the starknet contract
    */
-  public function deployContract(ContractContract $contract, array $constructorCalldata, BigInteger $addressSalt): array;
+  public function deployContract(ContractContract $contract, array $constructorCalldata, BigNumber $addressSalt): array;
 
 
  /**
@@ -105,8 +105,8 @@ interface ProviderContract {
    * @param signature - (optional) signature to send along
    * @return response from addTransaction
    */
-  public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], BigInteger $signature = null): array;
+  public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], BigNumber $signature = null): array;
 
 
-  public function waitForTx(BigInteger $txHash);
+  public function waitForTx(BigNumber $txHash);
 }

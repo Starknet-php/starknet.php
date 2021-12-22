@@ -11,10 +11,6 @@ it('can get a contract address', function () {
     $this->assertEquals($this->provider->getContractAddresses(), "0xde29d060D45901Fb19ED6C6e959EB22d8626708e");
 });
 
-
-it('can call a contract and return a valid response', function () {
-});
-
 it('can get the current block and information', function () {
     $response = $this->provider->getBlock();
     expect($response)->toBeArray()->toHaveKeys(["parent_block_hash", "transaction_receipts", "state_root", "transactions", "status", "block_hash", "timestamp", "block_number"]);
@@ -31,15 +27,23 @@ it('can get a storage variable in a contract located at a specific key', functio
 });
 
 it('can get the status of a transaction', function () {
+    $response = $this->provider->getTransactionStatus('0x58691cd6827e96af42f455ce7db39a2cb9e86ee6cf6bdda6e8f3126d30c46e3');
+    expect($response)->toBeArray()->toHaveKeys(["tx_status", "block_hash"]);
 });
 
 it('can get transaction information', function () {
+    $response = $this->provider->getTransaction('0x58691cd6827e96af42f455ce7db39a2cb9e86ee6cf6bdda6e8f3126d30c46e3');
+    expect($response)->toBeArray()->toHaveKeys(["block_hash", "block_hash", "transaction_index", "transaction", ]);
 });
 
+/*
 it('can call function in a starknet contract', function () {
 });
 
 it('can deploy a contract', function () {
 });
 
+it('can call a contract and return a valid response', function () {
+});
+*/
 

@@ -10,7 +10,6 @@ use starknet\Contracts\TransactionContract;
 use Exception;
 use Pest\Support\Arr;
 
-
 class Provider implements ProviderContract{
 
     protected string $baseUrl;
@@ -108,19 +107,23 @@ class Provider implements ProviderContract{
      * @param txHash
      * @return array the transaction status array { block_id, tx_status: NOT_RECEIVED | RECEIVED | PENDING | REJECTED | ACCEPTED_ONCHAIN }
      */
-    public function getTransactionStatus(BigInteger $transactionHash): array{
-        // @todo
+    public function getTransactionStatus(String $transactionHash): array{
+
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction_status?transactionHash=$transactionHash");
+        return $response;
+    
     }
 
 
     /**
-     * Gets the transaction information from a tx id.
+     * Gets the transaction information from a tx hash.
      *   
      * @param txHash
      * @return array transacton { transaction_id, status, transaction, block_id?, block_number?, transaction_index?, transaction_failure_reason? }
      */
-    public function getTransaction(BigInteger $transactionHash): array{
-        // @todo
+    public function getTransaction(String $transactionHash): array{
+        $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction?transactionHash=$transactionHash");
+        return $response;
     }
 
 

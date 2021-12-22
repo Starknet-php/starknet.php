@@ -65,7 +65,7 @@ interface ProviderContract {
    * @param txHash
    * @return array the transaction status array { block_id, tx_status: NOT_RECEIVED | RECEIVED | PENDING | REJECTED | ACCEPTED_ONCHAIN }
    */
-  public function getTransactionStatus(BigInteger $transactionHash): array;
+  public function getTransactionStatus(String $transactionHash): array;
 
 
   /**
@@ -74,7 +74,7 @@ interface ProviderContract {
    * @param txHash
    * @return array transacton { transaction_id, status, transaction, block_id?, block_number?, transaction_index?, transaction_failure_reason? }
    */
-  public function getTransaction(BigInteger $transactionHash): array;
+  public function getTransaction(String $transactionHash): array;
 
 
   /**

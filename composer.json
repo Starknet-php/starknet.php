@@ -13,7 +13,8 @@
         "php": "^8.0",
         "ext-bcmath": "*",
         "guzzlehttp/guzzle": "^7.4",
-        "phpseclib/phpseclib": "^3.0.12",
+        "kornrunner/keccak": "^1.1",
+        "phpseclib/phpseclib": "~3.0",
         "simplito/elliptic-php": "^1.0"
     },
     "require-dev": {

@@ -9,6 +9,7 @@ use starknet\Contracts\ContractContract;
 use starknet\Contracts\TransactionContract;
 use Exception;
 use Pest\Support\Arr;
+use starknet\Utils\StarkUtils;
 
 class Provider implements ProviderContract{
 
@@ -134,7 +135,18 @@ class Provider implements ProviderContract{
      * @return transaction_confirmation
      */
     public function addTransaction(TransactionContract $transaction): array{
+        /*
+            const signature =
+      transaction.type === 'INVOKE_FUNCTION' && formatSignature(transaction.signature);
+    const contract_address_salt =
+      transaction.type === 'DEPLOY' && toHex(toBN(transaction.contract_address_salt));
+
+        */
         // @todo
+
+        $signature = $transaction->type === 'INVOKE_FUNCTION' ? StarkUtils::formatSignature($transaction->signature) : null;
+
+
     }
 
 

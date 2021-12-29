@@ -2,6 +2,7 @@
 
 use starknet\Provider\Provider;
 use phpseclib3\Math\BigInteger;
+use starknet\Utils\StarkUtils;
 
 beforeEach(function () {
     $this->provider = new Provider('testnet');
@@ -34,6 +35,10 @@ it('can get the status of a transaction', function () {
 it('can get transaction information', function () {
     $response = $this->provider->getTransaction('0x58691cd6827e96af42f455ce7db39a2cb9e86ee6cf6bdda6e8f3126d30c46e3');
     expect($response)->toBeArray()->toHaveKeys(["block_hash", "block_hash", "transaction_index", "transaction", ]);
+});
+
+it('can get function selector from name', function () {
+    dd(StarkUtils::getSelectorFromName('init_pool'));
 });
 
 /*

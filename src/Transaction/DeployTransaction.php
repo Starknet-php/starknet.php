@@ -5,18 +5,6 @@ use starknet\Contracts\TransactionContract;
 
 
 class DeployTransaction implements TransactionContract  {
-    /*
-    Represents a transaction in the StarkNet network that is an invocation of a Cairo contract
-    function.
-
-            export type DeployTransaction = {
-        type: 'DEPLOY';
-        contract_definition: CompressedCompiledContract;
-        contract_address_salt: BigNumberish;
-        constructor_calldata: string[];
-        nonce?: BigNumberish;
-};
-    */
     static String $type = 'DEPLOY';
 
     public BigInteger $contract_address_salt;

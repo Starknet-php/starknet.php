@@ -19,16 +19,27 @@ class StarkUtils{
         }
     }
 
-    /**
-     * Function to get the hex selector from a given function name
-     *
-     * [Reference](https://github.com/starkware-libs/cairo-lang/blob/master/src/starkware/starknet/public/abi.py#L25-L26)
-     * @param functionName - selectors abi function name
-     * @returns hex selector of given abi function name
-     */
-
     public static function getSelectorFromName(string $functionName){
         return Encode::removeHexLeadingZero(Numbers::toHex(Hash::starknetKeccak($functionName)));
+    }
+
+    public static function compileCalldata(array $args){
+        $mapped = array_map(function ($x) {
+            if (is_array($x)) {
+                return [Numbers::toBN(sizeof($x))->toString(), array_map(fn($y) => (Numbers::toBN($y))->toString(), $x)];
+            } else {
+                return (Numbers::toBN($x))->toString();
+            }
+        }, $args);
+        $mapped = array_values($mapped);
+        $flattened = self::flatten($mapped);
+        return $flattened;
+    }
+
+    private static function flatten(array $array) {
+        $return = array();
+        array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
+        return $return;
     }
 
 }

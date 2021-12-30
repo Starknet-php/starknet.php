@@ -57,8 +57,15 @@ class Provider implements ProviderContract{
      * @param blockId
      * @return array the result of the function on the smart contract.
      */
-    function callContract(array $contractTransactrion, BigInteger $blockNumber): array{
-        // @todo
+    public function callContract(array $contractTransaction, BigInteger $blockNumber = null): array{
+
+        $blockNumber = is_null($blockNumber) ? 'null' : $blockNumber;
+
+        $params = array_merge( ['signature' => [], 'calldata' => []], $contractTransaction);
+        //dd(json_encode($params));
+
+        $response = $this->request('POST', "$this->feederGatewayUrl/call_contract?blockId=$blockNumber", ['body' => json_encode($params)]);
+        return $response;
     }
 
 
@@ -135,17 +142,8 @@ class Provider implements ProviderContract{
      * @return transaction_confirmation
      */
     public function addTransaction(TransactionContract $transaction): array{
-        /*
-            const signature =
-      transaction.type === 'INVOKE_FUNCTION' && formatSignature(transaction.signature);
-    const contract_address_salt =
-      transaction.type === 'DEPLOY' && toHex(toBN(transaction.contract_address_salt));
-
-        */
-        // @todo
 
         $signature = $transaction->type === 'INVOKE_FUNCTION' ? StarkUtils::formatSignature($transaction->signature) : null;
-
 
     }
 

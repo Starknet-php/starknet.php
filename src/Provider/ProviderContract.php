@@ -1,9 +1,7 @@
 <?php
-namespace starknet\Contracts;
+namespace starknet\Provider;
 
 use phpseclib3\Math\BigInteger;
-use starknet\Contracts\ContractContract;
-use starknet\Contracts\TransactionContract;
 
 /*
 [Reference] -> https://github.com/starkware-libs/cairo-lang/blob/f464ec4797361b6be8989e36e02ec690e74ef285/src/starkware/starknet/services/api/gateway/gateway_client.py
@@ -11,26 +9,24 @@ use starknet\Contracts\TransactionContract;
 interface ProviderContract {
 
   /**
-   * Gets the smart contract address on the goerli testnet.
-   *
+   * Gets the smart contract address on the goerli testnet ethereum
    * @return starknet smart contract addresses
    */
-
   public function getContractAddresses(): string;
 
   
   /**
-   * Calls a function on the StarkNet contract.
+   * Calls a function on a starknet contract 
    *
    * @param invokeTransaction - transaction to be invoked
    * @param blockId
    * @return array the result of the function on the smart contract.
    */
-  function callContract(array $contractTransactrion, BigInteger $blockNumber): array;
+  function callContract(array $contractTransaction, BigInteger $blockNumber): array;
 
 
   /**
-   * Gets the block information from a block ID.
+   * Gets the block information
    * 
    * @param blockId
    * @return array the block object { block_id, previous_block_id, state_root, status, timestamp, transaction_receipts, transactions }
@@ -39,7 +35,7 @@ interface ProviderContract {
 
   
   /**
-   * Gets the code of a deployed contract.
+   * gets the code deployed to a contract address
    *
    * @param contractAddress
    * @param blockId
@@ -49,10 +45,10 @@ interface ProviderContract {
 
 
   /**
-   * Gets the contract's storage variable at a specific key.
+   * Gets the contract's storage variable at a specific key
    * 
    * @param contractAddress
-   * @param key - from getStorageVarAddress('<STORAGE_VARIABLE_NAME>') (WIP)
+   * @param key 
    * @param blockId
    * @return array value of the storage variable
    */
@@ -63,7 +59,7 @@ interface ProviderContract {
    * Gets the status of a transaction.
    *
    * @param txHash
-   * @return array the transaction status array { block_id, tx_status: NOT_RECEIVED | RECEIVED | PENDING | REJECTED | ACCEPTED_ONCHAIN }
+   * @return array the transaction status
    */
   public function getTransactionStatus(string $transactionHash): array;
 
@@ -72,7 +68,7 @@ interface ProviderContract {
    * Gets the transaction information from a tx id.
    *   
    * @param txHash
-   * @return array transacton { transaction_id, status, transaction, block_id?, block_number?, transaction_index?, transaction_failure_reason? }
+   * @return array transacton
    */
   public function getTransaction(string $transactionHash): array;
 
@@ -83,17 +79,17 @@ interface ProviderContract {
    * @param transaction - transaction to be invoked
    * @return transaction_confirmation
    */
-  public function addTransaction(TransactionContract $transaction): array;
+  public function addTransaction(array $transaction): array;
 
 
   /**
    * Deploys a given compiled contract (json) to starknet
    *
-   * @param contract - a json object containing the compiled contract
+   * @param contract - a php array containing the compiled contract
    * @param address - (optional, defaults to a random address) the address where the contract should be deployed (alpha)
    * @return a confirmation of sending a transaction on the starknet contract
    */
-  public function deployContract(ContractContract $contract, array $constructorCalldata, BigInteger $addressSalt): array;
+  public function deployContract(array $contract, array $constructorCalldata, BigInteger $addressSalt): array;
 
 
  /**
@@ -105,8 +101,6 @@ interface ProviderContract {
    * @param signature - (optional) signature to send along
    * @return response from addTransaction
    */
-  public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], BigInteger $signature = null): array;
+  public function invokeFunction(string $contractAddress, string $entrypointSelector, array $calldata = [], array $signature = null): array;
 
-
-  public function waitForTx(BigInteger $txHash);
 }

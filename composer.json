@@ -14,6 +14,7 @@
         "ext-bcmath": "*",
         "guzzlehttp/guzzle": "^7.4",
         "kornrunner/keccak": "^1.1",
+        "mdanter/ecc": "^1.0",
         "phpseclib/phpseclib": "~3.0",
         "simplito/elliptic-php": "^1.0"
     },

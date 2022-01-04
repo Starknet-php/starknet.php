@@ -1,14 +1,7 @@
 <?php
-namespace starknet\Utils;
-use phpseclib3\Math\BigInteger;
-use Exception;
-
+namespace starknet\Helpers;
 
 class Encode{
-
-    public function __construct()
-    {
-    }
 
     public static function addHexPrefix(string $n){
         $hex = Encode::removeHexPrefix($n);
@@ -23,6 +16,5 @@ class Encode{
         $hex = preg_replace('/^0+/','', $hex);
         return self::addHexPrefix($hex);
     }
-
 
 }

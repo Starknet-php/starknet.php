@@ -2,8 +2,7 @@
 
 use starknet\Provider\Provider;
 use phpseclib3\Math\BigInteger;
-use starknet\Utils\Numbers;
-use starknet\Utils\StarkUtils;
+use starknet\Helpers\Stark;
 
 beforeEach(function () {
     $this->provider = new Provider('testnet');
@@ -19,7 +18,7 @@ it('can get the current block and information', function () {
 });
 
 it('can get the code deployed in a contract', function () {
-    $response = $this->provider->getCode('0x163a1542a64402ffc93e39a4962eec51ce126f2e634631d3f1f6770a76e3a61');
+    $response = $this->provider->getCode('0x3188903406daaaedd123598a8bd1f5dbec34720089037f4bf1473e51857e190');
     expect($response)->toBeArray()->toHaveKeys(["bytecode", "abi"]);
 });
 
@@ -38,22 +37,10 @@ it('can get transaction information', function () {
     expect($response)->toBeArray()->toHaveKeys(["block_hash", "block_hash", "transaction_index", "transaction", ]);
 });
 
-it('can call a contract with compiled call data', function () {
-
+it('can call a contract', function () {
     $response = $this->provider->callContract(['contract_address' => '0x3188903406daaaedd123598a8bd1f5dbec34720089037f4bf1473e51857e190',
-        'entry_point_selector' => StarkUtils::getSelectorFromName('balanceOf'),
-        'calldata' => StarkUtils::compileCalldata(['account' => '0x440752a57004cc72bec43917a0ebc0c92d67a5187227631584cb7d54c29d9ed'])]);
-        dd($response);
-})->only();
-
-/*
-it('can call function in a starknet contract', function () {
+        'entry_point_selector' => Stark::getSelectorFromName('balanceOf'),
+        'calldata' => Stark::compileCalldata(['account' => '0x58bc9eb6f665d6745b3c92deb6929f4ab18bb791cc78d14fcfba92e4b2654f6'])]);
+        expect($response)->toBeArray()->toContain("0xde0b6b3a7640000");
 });
-
-it('can deploy a contract', function () {
-});
-
-it('can call a contract and return a valid response', function () {
-});
-*/
 

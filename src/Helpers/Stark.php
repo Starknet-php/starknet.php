@@ -1,18 +1,15 @@
 <?php
-namespace starknet\Utils;
-use phpseclib3\Math\BigInteger;
+namespace starknet\Helpers;
+
 use Exception;
-use starknet\Utils\Hash;
+use starknet\Helpers\Hash;
 
 
-class StarkUtils{
+class Stark{
 
-    public function __construct()
-    {
-    }
     public static function formatSignature(array $signature): array {
         try{
-            $bn_array = array_map(fn($x) => (new BigInteger($x))->toString(), $signature);
+            $bn_array = array_map(fn($x) => ($x)->toString(), $signature);
             return $bn_array;
         } catch (Exception $e) {
             return [];
@@ -36,7 +33,7 @@ class StarkUtils{
         return $flattened;
     }
 
-    private static function flatten(array $array) {
+    public static function flatten(array $array) {
         $return = array();
         array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
         return $return;

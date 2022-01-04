@@ -1,6 +1,6 @@
 <?php
 
-use starknet\Contracts\TransactionContract;
+use starknet\Transaction\TransactionContract;
 
 
 class CallFunctionTransaction implements TransactionContract  {

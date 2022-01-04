@@ -1,5 +1,5 @@
 <?php
-namespace starknet\Contracts;
+namespace starknet\Transaction;
 
 interface TransactionContract {
 

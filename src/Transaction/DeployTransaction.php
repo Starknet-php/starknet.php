@@ -1,7 +1,7 @@
 <?php
 
 use phpseclib3\Math\BigInteger;
-use starknet\Contracts\TransactionContract;
+use starknet\Transaction\TransactionContract;
 
 
 class DeployTransaction implements TransactionContract  {

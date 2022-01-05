@@ -10,3 +10,4 @@ phpcs.xml
 *.swo
 .DS_store
 /build
+/.idea

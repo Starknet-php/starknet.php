@@ -5,8 +5,8 @@ use Elliptic\EC;
 use starknet\Constants;
 use Elliptic\Curve\PresetCurve;
 
-class ellipticCurve{
-
+class ellipticCurve
+{
     public static function ec()
     {
         $sha256 = [ "blockSize" => 512, "outSize" => 256, "hmacStrength" => 192, "padLength" => 64, "algo" => 'sha256' ];
@@ -23,13 +23,15 @@ class ellipticCurve{
           )));
     }
 
-    public static function constantPoints(){
-        return array_map(function($x) {
+    public static function constantPoints()
+    {
+        return array_map(function ($x) {
             return self::ec()->curve->point($x[0], $x[1]);
         }, Constants::CONSTANT_POINTS);
     }
 
-    public static function sign(string $pk, string $message){
+    public static function sign(string $pk, string $message)
+    {
         $messageBn = Numbers::toBN(Encode::addHexPrefix($message));
         assert($messageBn->compare(Constants::ZERO()) > 0 || $messageBn->compare(Constants::ZERO()) == 0, 'out of bound');
         $ecdsa = Numbers::toBN(Encode::addHexPrefix(Constants::MAX_ECDSA_VAL));
@@ -38,13 +40,13 @@ class ellipticCurve{
         return [$signature->r, $signature->s];
     }
 
-    public static function fixHex(string $hex){
-        $hex = preg_replace('/^0x0*/','', $hex);
-          if (strlen($hex) <= 62){
-              return $hex;
-          }
-          else if (strlen($hex) === 63){
-              return $hex . "0";
-          }
+    public static function fixHex(string $hex)
+    {
+        $hex = preg_replace('/^0x0*/', '', $hex);
+        if (strlen($hex) <= 62) {
+            return $hex;
+        } elseif (strlen($hex) === 63) {
+            return $hex . "0";
+        }
     }
 }

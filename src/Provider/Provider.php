@@ -14,8 +14,8 @@ use Pest\Support\Arr;
 use starknet\Helpers\Numbers;
 use starknet\Helpers\Stark;
 
-class Provider implements ProviderContract{
-
+class Provider implements ProviderContract
+{
     protected string $baseUrl;
 
     protected string $feederGatewayUrl;
@@ -24,17 +24,18 @@ class Provider implements ProviderContract{
 
     protected Client $client;
 
-    function __construct(string $network){
+    public function __construct(string $network)
+    {
         $baseUrl = Provider::getNetworkURL($network);
         $this->baseUrl = $baseUrl;
         $this->feederGatewayUrl = "$baseUrl/feeder_gateway";
         $this->gatewayUrl = "$baseUrl/gateway";
         $this->client = new Client();
-
     }
 
-    static function getNetworkURL(string $network): string{
-        return match($network){
+    public static function getNetworkURL(string $network): string
+    {
+        return match ($network) {
             'mainnet' => 'https://alpha-mainnet.starknet.io',
             'testnet' => 'https://alpha4.starknet.io'
         };
@@ -45,24 +46,26 @@ class Provider implements ProviderContract{
      * Gets the smart contract address on the goerli testnet ethereum
      * @return starknet smart contract addresses
      */
-    public function getContractAddresses(): string{
+    public function getContractAddresses(): string
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_contract_addresses");
         return Arr::get($response, 'Starknet');
     }
 
 
     /**
-     * Calls a function on a starknet contract 
+     * Calls a function on a starknet contract
      *
-     * @param invokeTransaction - transaction to be invoked
-     * @param blockId
+     * @param array $contractTransaction
+     * @param BigInteger|null $blockNumber
      * @return array the result of the function on the smart contract.
+     * @throws Exception
      */
-    public function callContract(array $contractTransaction, BigInteger $blockNumber = null): array{
-
+    public function callContract(array $contractTransaction, BigInteger $blockNumber = null): array
+    {
         $blockNumber = is_null($blockNumber) ? 'null' : $blockNumber;
 
-        $params = array_merge( ['signature' => [], 'calldata' => []], $contractTransaction);
+        $params = array_merge(['signature' => [], 'calldata' => []], $contractTransaction);
 
         $response = $this->request('POST', "$this->feederGatewayUrl/call_contract?blockId=$blockNumber", ['body' => json_encode($params)]);
         return $response['result'];
@@ -71,24 +74,28 @@ class Provider implements ProviderContract{
 
     /**
      * Gets the block information
-     * 
-     * @param blockId
+     *
+     * @param BigInteger|null $blockId
      * @return array the block object { block_id, previous_block_id, state_root, status, timestamp, transaction_receipts, transactions }
+     * @throws Exception
      */
-    public function getBlock(BigInteger $blockId = null): array{
+    public function getBlock(BigInteger $blockId = null): array
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_block?block_id=$blockId");
         return $response;
     }
 
-    
+
     /**
      * gets the code deployed to a contract address
      *
-     * @param contractAddress
-     * @param blockId
+     * @param string $contractAddress
+     * @param BigInteger|null $blockId
      * @return array containing Bytecode and ABI of compiled contract
+     * @throws Exception
      */
-    public function getCode(string $contractAddress, BigInteger $blockId = null): array{
+    public function getCode(string $contractAddress, BigInteger $blockId = null): array
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_code?contractAddress=$contractAddress&block_id=$blockId");
         return $response;
     }
@@ -96,14 +103,15 @@ class Provider implements ProviderContract{
 
     /**
      * Gets the contract's storage variable at a specific key
-     * 
-     * @param contractAddress
-     * @param key 
-     * @param blockId
+     *
+     * @param string $contractAddress
+     * @param BigInteger $key
+     * @param BigInteger|null $blockId
      * @return array value of the storage variable
+     * @throws Exception
      */
-    public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId = null): array{
-        
+    public function getStorageAt(string $contractAddress, BigInteger $key, BigInteger $blockId = null): array
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_storage_at?contractAddress=$contractAddress&key=$key&blockId=$blockId");
         return ["$key" => $response];
     }
@@ -112,11 +120,12 @@ class Provider implements ProviderContract{
     /**
      * Gets the status of a transaction.
      *
-     * @param txHash
+     * @param String $transactionHash
      * @return array the transaction status
+     * @throws Exception
      */
-    public function getTransactionStatus(String $transactionHash): array{
-
+    public function getTransactionStatus(String $transactionHash): array
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction_status?transactionHash=$transactionHash");
         return $response;
     }
@@ -124,11 +133,13 @@ class Provider implements ProviderContract{
 
     /**
      * Gets the transaction information from a tx id.
-     *   
-     * @param txHash
+     *
+     * @param String $transactionHash
      * @return array transacton
+     * @throws Exception
      */
-    public function getTransaction(String $transactionHash): array{
+    public function getTransaction(String $transactionHash): array
+    {
         $response = $this->request('GET', "$this->feederGatewayUrl/get_transaction?transactionHash=$transactionHash");
         return $response;
     }
@@ -136,17 +147,18 @@ class Provider implements ProviderContract{
 
     /**
      * Invoke a function on the starknet contract
-     *   
-     * @param transaction - transaction to be invoked
-     * @return transaction_confirmation
+     *
+     * @param array $transaction
+     * @return array
+     * @throws Exception
      */
-    public function addTransaction(array $transaction): array{
-
+    public function addTransaction(array $transaction): array
+    {
         $signature = $transaction['type'] === 'INVOKE_FUNCTION' ? Stark::formatSignature($transaction['signature']) : null;
         $address_salt = $transaction['type'] === 'INVOKE_FUNCTION' ? Numbers::toHex(Numbers::toBN($transaction['contract_address_salt'])) : null;
-        if ($transaction['type'] === 'INVOKE_FUNCTION'){
+        if ($transaction['type'] === 'INVOKE_FUNCTION') {
             $params = array_merge($transaction, ['signature' => $signature]);
-        } else if($transaction['type'] === 'DEPLOY'){
+        } elseif ($transaction['type'] === 'DEPLOY') {
             $params = array_merge($transaction, [$address_salt]);
         } else {
             throw new Exception('invalid transaction type');
@@ -161,11 +173,13 @@ class Provider implements ProviderContract{
     /**
      * Deploys a given compiled contract (json) to starknet
      *
-     * @param contract - a php array containing the compiled contract
-     * @param address - (optional, defaults to a random address) the address where the contract should be deployed (alpha)
-     * @return a confirmation of sending a transaction on the starknet contract
+     * @param array $contract
+     * @param array $constructorCalldata
+     * @param BigInteger $addressSalt
+     * @return array confirmation of sending a transaction on the starknet contract
      */
-    public function deployContract(array $contract, array $constructorCalldata, BigInteger $addressSalt): array{
+    public function deployContract(array $contract, array $constructorCalldata, BigInteger $addressSalt): array
+    {
         // @todo
     }
 
@@ -173,13 +187,15 @@ class Provider implements ProviderContract{
     /**
      * Invokes a function on starknet
      *
-     * @param contractAddress - target contract address for invoke
-     * @param entrypointSelector - target entrypoint selector for
-     * @param calldata - (optional, default []) calldata
-     * @param signature - (optional) signature to send along
-     * @return response from addTransaction
+     * @param string $contractAddress
+     * @param string $functionName
+     * @param array $calldata
+     * @param array|null $signature
+     * @return array from addTransaction
+     * @throws Exception
      */
-    public function invokeFunction(string $contractAddress, string $functionName, array $calldata = [], array $signature = null): array{
+    public function invokeFunction(string $contractAddress, string $functionName, array $calldata = [], array $signature = null): array
+    {
         return $this->addTransaction([
             'type' => 'INVOKE_FUNCTION',
             'contract_address' => $contractAddress,
@@ -190,20 +206,21 @@ class Provider implements ProviderContract{
     }
 
     /**
-     * Used for handling external requests to the starknet sequencer 
-     * 
-     * @param method - the method being called {GET | POST}
-     * @param uri - the endpoint being called
-     * @param payload - the parameters of the request
+     * Used for handling external requests to the starknet sequencer
+     *
+     * @param string $method
+     * @param string $uri
+     * @param array $payload
+     * @return mixed
+     * @throws Exception
      */
-    private function request(string $method, string $uri, array $payload = []){
-        try{
+    private function request(string $method, string $uri, array $payload = []): mixed
+    {
+        try {
             $response = $this->client->request($method, $uri, $payload)->getBody()->getContents();
-        } catch (GuzzleException $exception){
+        } catch (GuzzleException $exception) {
             throw new Exception($exception->getMessage());
         }
         return json_decode($response, true);
     }
-
-    
 }

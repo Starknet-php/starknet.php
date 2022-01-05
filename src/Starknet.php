@@ -6,9 +6,7 @@ namespace starknet;
 
 final class Starknet
 {
-    function __construct()
+    public function __construct()
     {
-        
     }
-
 }

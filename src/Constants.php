@@ -1,5 +1,6 @@
 <?php
 namespace starknet;
+
 use starknet\Helpers\Numbers;
 use phpseclib3\Math\BigInteger;
 
@@ -7,12 +8,24 @@ use phpseclib3\Math\BigInteger;
  * This is taken from https://github.com/starkware-libs/starkex-resources/blob/master/crypto/starkware/crypto/signature/pedersen_params.json but converted to hex.
  */
 
-class Constants{
-    
-    public static function ZERO(): BigInteger { return Numbers::toBN(0);}
-    public static function ONE(): BigInteger { return Numbers::toBN(1);}
-    public static function TWO(): BigInteger { return Numbers::toBN(2);}
-    public static function MASK_250(): BigInteger { return Numbers::toBN('1809251394333065553493296640760748560207343510400633813116524750123642650623'); }
+class Constants
+{
+    public static function ZERO(): BigInteger
+    {
+        return Numbers::toBN(0);
+    }
+    public static function ONE(): BigInteger
+    {
+        return Numbers::toBN(1);
+    }
+    public static function TWO(): BigInteger
+    {
+        return Numbers::toBN(2);
+    }
+    public static function MASK_250(): BigInteger
+    {
+        return Numbers::toBN('1809251394333065553493296640760748560207343510400633813116524750123642650623');
+    }
 
     const FIELD_PRIME = '800000000000011000000000000000000000000000000000000000000000001';
     const EC_ORDER = '800000000000010FFFFFFFFFFFFFFFFB781126DCAE7B2321E66A241ADC64D2F';

@@ -155,7 +155,7 @@ class Provider implements ProviderContract
     public function addTransaction(array $transaction): array
     {
         $signature = $transaction['type'] === 'INVOKE_FUNCTION' ? Stark::formatSignature($transaction['signature']) : null;
-        $address_salt = $transaction['type'] === 'INVOKE_FUNCTION' ? Numbers::toHex(Numbers::toBN($transaction['contract_address_salt'])) : null;
+        $address_salt = $transaction['type'] === 'DEPLOY' ? Numbers::toHex(Numbers::toBN($transaction['contract_address_salt'])) : null;
         if ($transaction['type'] === 'INVOKE_FUNCTION') {
             $params = array_merge($transaction, ['signature' => $signature]);
         } elseif ($transaction['type'] === 'DEPLOY') {

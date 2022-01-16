@@ -26,7 +26,7 @@ class Signer extends Provider
         if (!in_array('nonce', array_keys($transaction))) {
             $response = parent::callContract(['contract_address' => $this->address,
                 'entry_point_selector' => Stark::getSelectorFromName('get_nonce')]);
-            $nonceBn = Numbers::toBN($response['result'][0]);
+            $nonceBn = Numbers::toBN($response[0]);
         } else {
             $nonceBn = Numbers::toBN($transaction['nonce']);
         }

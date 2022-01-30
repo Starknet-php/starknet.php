@@ -19,9 +19,9 @@ class Hash
         return Numbers::toBn(Hash::keccakHex($value))->bitwise_and(Constants::MASK_250());
     }
 
-    public static function perdesenHash(array $dataArray)
+    public static function perdesenHash(array $dataArray, array $ecPoints)
     {
-        $ecPoints = ellipticCurve::constantPoints();
+
         $point = $ecPoints[0];
         for ($i = 0; $i < sizeof($dataArray); $i++) {
             $x = Numbers::toBN($dataArray[$i]);
@@ -41,8 +41,9 @@ class Hash
 
     public static function hashArrayElements(array $data)
     {
+        $ecPoints = ellipticCurve::constantPoints();
         $merged = array_merge($data, [sizeof($data)]);
-        return array_reduce($merged, fn ($x, $y) => self::perdesenHash([$x, $y]), 0);
+        return array_reduce($merged, fn ($x, $y) => self::perdesenHash([$x, $y], $ecPoints), 0);
     }
 
     public static function hashCallData(array $calldata)

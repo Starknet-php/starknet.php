@@ -163,7 +163,6 @@ class Provider implements ProviderContract
         } else {
             throw new Exception('invalid transaction type');
         }
-        var_dump($params);
 
         $response = $this->request('POST', "$this->gatewayUrl/add_transaction", ['json' => $params]);
         return $response;

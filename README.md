@@ -6,7 +6,7 @@
       <a href="https://github.com/Starknet-php/starknet.php/blob/main/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-black"></a>
 </p>
 
-> This project is a work-in-progress. Code and documentation are currently under development and are subject to change.
+> This project is a work-in-progress. Code and documentation are currently under development and are subject to change
 
 ## Install
 
